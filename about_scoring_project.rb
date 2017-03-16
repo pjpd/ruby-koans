@@ -31,6 +31,37 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 
 def score(dice)
   # You need to write this method
+  total = 0
+
+
+  hash = Hash.new(0)
+  dice.each{|key| hash[key] += 1}
+
+  # * A set of three ones is 1000 points
+  if hash[1] >= 3
+    total += 1000
+    hash[1] -= 3
+  end
+
+  # * A set of three numbers (other than ones) is worth 100 times the
+  #   number. (e.g. three fives is 500 points).
+  hash.each do |die|
+    if die.last >= 3
+      hash[die.first] -= 3
+      total += die.first * 100
+    end
+  end
+
+  # * A one (that is not part of a set of three) is worth 100 points.
+  total += hash[1] * 100
+
+  # * A five (that is not part of a set of three) is worth 50 points.
+  total += hash[5] * 5 * 10
+
+  # * Everything else is worth 0 points.
+  # nothing
+
+  return total
 end
 
 class AboutScoringProject < Neo::Koan
